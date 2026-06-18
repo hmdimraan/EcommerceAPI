@@ -18,11 +18,13 @@ builder.Services.AddSwaggerGen();
 // DATABASE CONNECTION
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("MariaDBConnection"),
+        ServerVersion.AutoDetect(
+            builder.Configuration.GetConnectionString("MariaDBConnection")
+        )
     )
 );
-
 // CORS POLICY FOR ANGULAR
 
 builder.Services.AddCors(options =>

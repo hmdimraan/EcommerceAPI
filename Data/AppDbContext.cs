@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceAPI.Data
 {
-    // DbContext is built in EF core class provides insert,update,delete ....
-    public class AppDbContext : DbContext //AppDbContext is database context class which represents my database used by EF to communicate with database
+    // DbContext is built-in EF Core class that provides Insert, Update, Delete, etc.
+    public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options)//DbContextOptions<AppDbContext> contains provider settings
-            : base(options)//passes to parent class so EF core can use those settings
+        public AppDbContext(DbContextOptions<AppDbContext> options)
+        : base(options)
         {
         }
-       
-        public DbSet<Customer> Customers { get; set; }//DbSet<Customer>represents table of Customer objects.
+
+    public DbSet<Customer> Customers { get; set; }
 
         public DbSet<Order> Orders { get; set; }
 
@@ -23,14 +23,28 @@ namespace EcommerceAPI.Data
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<Payment> Payments { get; set; }
+
         public DbSet<Employee> Employees { get; set; }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)//method used to configure relationship between tables
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Order>()//foreignkey exist in order table
-                .HasOne(o => o.Customer)//one order object goes to customer property of that order
+            // Table mappings for MariaDB (lowercase table names)
+
+            modelBuilder.Entity<Category>().ToTable("categories");
+            modelBuilder.Entity<Customer>().ToTable("customers");
+            modelBuilder.Entity<Employee>().ToTable("employees");
+            modelBuilder.Entity<Product>().ToTable("products");
+            modelBuilder.Entity<Order>().ToTable("orders");
+            modelBuilder.Entity<OrderDetail>().ToTable("orderdetails");
+            modelBuilder.Entity<Payment>().ToTable("payments");
+
+            // Relationships
+
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Customer)
                 .WithMany(c => c.Orders)
                 .HasForeignKey(o => o.CustomerID)
-                .OnDelete(DeleteBehavior.Restrict);//Restrict delete Cannot delete customer if orders exist.
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Product>()
                 .HasOne(p => p.Category)
@@ -42,13 +56,13 @@ namespace EcommerceAPI.Data
                 .HasOne(od => od.Order)
                 .WithMany(o => o.OrderDetails)
                 .HasForeignKey(od => od.OrderID)
-               .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<OrderDetail>()
                 .HasOne(od => od.Product)
                 .WithMany(p => p.OrderDetails)
                 .HasForeignKey(od => od.ProductID)
-               .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Payment>()
                 .HasOne(p => p.Order)
@@ -57,4 +71,5 @@ namespace EcommerceAPI.Data
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
+
 }

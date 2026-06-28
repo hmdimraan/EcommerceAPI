@@ -64,6 +64,8 @@ namespace EcommerceAPI.Data
 
             modelBuilder.Entity<CartItem>()
                 .ToTable("cartitems");
+            modelBuilder.Entity<Review>()
+    .ToTable("reviews");
             // Decimal Precision
             modelBuilder.Entity<Product>()
                 .Property(p => p.Price)

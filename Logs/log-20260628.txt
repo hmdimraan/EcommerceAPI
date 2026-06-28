@@ -247,3 +247,28 @@ CREATE TABLE `categories` (
     `CategoryName` longtext CHARACTER SET utf8mb4 NOT NULL,
     CONSTRAINT `PK_categories` PRIMARY KEY (`CategoryID`)
 ) CHARACTER SET=utf8mb4;
+2026-06-28 15:37:31.531 +05:30 [ERR] The model for context 'AppDbContext' has pending changes. Add a new migration before updating the database.
+2026-06-28 15:37:35.081 +05:30 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-06-28 15:37:35.356 +05:30 [INF] Executed DbCommand (265ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT GET_LOCK('__railway_EFMigrationsLock', 259200)
+2026-06-28 15:37:35.686 +05:30 [INF] Executed DbCommand (269ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS `__EFMigrationsHistory` (
+    `MigrationId` varchar(150) CHARACTER SET utf8mb4 NOT NULL,
+    `ProductVersion` varchar(32) CHARACTER SET utf8mb4 NOT NULL,
+    CONSTRAINT `PK___EFMigrationsHistory` PRIMARY KEY (`MigrationId`)
+) CHARACTER SET=utf8mb4;
+2026-06-28 15:37:38.079 +05:30 [INF] Executed DbCommand (250ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='railway' AND TABLE_NAME='__EFMigrationsHistory';
+2026-06-28 15:37:38.332 +05:30 [INF] Executed DbCommand (249ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2026-06-28 15:37:38.344 +05:30 [INF] Applying migration '20260628072728_InitialMariaDB'.
+2026-06-28 15:37:38.649 +05:30 [INF] Executed DbCommand (270ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER DATABASE CHARACTER SET utf8mb4;
+2026-06-28 15:37:38.904 +05:30 [ERR] Failed executing DbCommand (252ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `categories` (
+    `CategoryID` int NOT NULL AUTO_INCREMENT,
+    `CategoryName` longtext CHARACTER SET utf8mb4 NOT NULL,
+    CONSTRAINT `PK_categories` PRIMARY KEY (`CategoryID`)
+) CHARACTER SET=utf8mb4;

@@ -1,9 +1,8 @@
 ﻿using EcommerceAPI.Data;
 using EcommerceAPI.DTOs;
 using EcommerceAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
-using MongoDB.Bson;
 namespace EcommerceAPI.Controllers
 {
     [Route("api/[controller]")]// gives api/categories controller is replaced
@@ -26,16 +25,18 @@ namespace EcommerceAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult GetCategory(int id)
         {
-            var category = _context.Categories.Find(id);
+            var category =
+                _context.Categories.Find(id);
 
             if (category == null)
             {
-                return Ok(new List<Category>());
+                return NotFound();
             }
 
             return Ok(category);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult CreateCategory(CategoryCreateDto dto)
         {
@@ -49,39 +50,48 @@ namespace EcommerceAPI.Controllers
 
             return Ok(category);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
-        public IActionResult UpdateCategory(int id, Category updatedCategory)
+        public IActionResult UpdateCategory(
+     int id,
+     Category updatedCategory)
         {
-            var category = _context.Categories.Find(id);
+            var category =
+                _context.Categories.Find(id);
 
             if (category == null)
             {
-                return Ok(new List<Category>());
+                return NotFound();
             }
 
-            category.CategoryName = updatedCategory.CategoryName;
+            category.CategoryName =
+                updatedCategory.CategoryName;
 
             _context.SaveChanges();
 
             return Ok(category);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public IActionResult DeleteCategory(int id)
         {
-            var category = _context.Categories.Find(id);
+            var category =
+                _context.Categories.Find(id);
 
             if (category == null)
             {
-                return Ok(new List<Category>());
+                return NotFound();
             }
 
             _context.Categories.Remove(category);
 
             _context.SaveChanges();
 
-            return Ok();
+            return Ok(new
+            {
+                Message =
+                    "Category deleted successfully."
+            });
         }
     }
 }

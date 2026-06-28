@@ -1,0 +1,139 @@
+2026-06-28 10:34:33.455 +05:30 [INF] Executed DbCommand (44ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Roles] AS [r]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2026-06-28 10:34:33.795 +05:30 [INF] User profile is available. Using 'C:\Users\Imran\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-06-28 10:34:34.133 +05:30 [INF] Now listening on: https://localhost:7269
+2026-06-28 10:34:34.135 +05:30 [INF] Now listening on: http://localhost:5237
+2026-06-28 10:34:34.225 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2026-06-28 10:34:34.226 +05:30 [INF] Hosting environment: Development
+2026-06-28 10:34:34.227 +05:30 [INF] Content root path: C:\Users\Imran\source\repos\EcommerceAPI\EcommerceAPI
+2026-06-28 10:35:02.263 +05:30 [INF] Request starting HTTP/2 OPTIONS https://localhost:7269/api/auth/login - null null
+2026-06-28 10:35:02.318 +05:30 [INF] CORS policy execution successful.
+2026-06-28 10:35:02.323 +05:30 [INF] Request finished HTTP/2 OPTIONS https://localhost:7269/api/auth/login - 204 null null 67.6028ms
+2026-06-28 10:35:02.329 +05:30 [INF] Request starting HTTP/2 POST https://localhost:7269/api/auth/login - application/json 46
+2026-06-28 10:35:02.336 +05:30 [INF] CORS policy execution successful.
+2026-06-28 10:35:02.380 +05:30 [INF] Executing endpoint 'EcommerceAPI.Controllers.AuthController.Login (EcommerceAPI)'
+2026-06-28 10:35:02.402 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[EcommerceAPI.DTOs.AuthResponseDto]] Login(EcommerceAPI.DTOs.LoginDto) on controller EcommerceAPI.Controllers.AuthController (EcommerceAPI).
+2026-06-28 10:35:02.644 +05:30 [INF] Executed DbCommand (43ms) [Parameters=[@dto_Email='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[UserID], [u].[Address], [u].[CreatedDate], [u].[Email], [u].[Name], [u].[PasswordHash], [u].[Phone], [u].[RoleID], [r].[RoleID], [r].[RoleName]
+FROM [Users] AS [u]
+INNER JOIN [Roles] AS [r] ON [u].[RoleID] = [r].[RoleID]
+WHERE [u].[Email] = @dto_Email
+2026-06-28 10:35:02.665 +05:30 [INF] Executing UnauthorizedObjectResult, writing value of type 'System.String'.
+2026-06-28 10:35:02.673 +05:30 [INF] Executed action EcommerceAPI.Controllers.AuthController.Login (EcommerceAPI) in 265.552ms
+2026-06-28 10:35:02.675 +05:30 [INF] Executed endpoint 'EcommerceAPI.Controllers.AuthController.Login (EcommerceAPI)'
+2026-06-28 10:35:02.682 +05:30 [INF] Request finished HTTP/2 POST https://localhost:7269/api/auth/login - 401 null text/plain; charset=utf-8 353.413ms
+2026-06-28 10:35:18.026 +05:30 [INF] Request starting HTTP/2 OPTIONS https://localhost:7269/api/auth/login - null null
+2026-06-28 10:35:18.029 +05:30 [INF] CORS policy execution successful.
+2026-06-28 10:35:18.030 +05:30 [INF] Request finished HTTP/2 OPTIONS https://localhost:7269/api/auth/login - 204 null null 4.2921ms
+2026-06-28 10:35:18.032 +05:30 [INF] Request starting HTTP/2 POST https://localhost:7269/api/auth/login - application/json 46
+2026-06-28 10:35:18.034 +05:30 [INF] CORS policy execution successful.
+2026-06-28 10:35:18.035 +05:30 [INF] Executing endpoint 'EcommerceAPI.Controllers.AuthController.Login (EcommerceAPI)'
+2026-06-28 10:35:18.037 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[EcommerceAPI.DTOs.AuthResponseDto]] Login(EcommerceAPI.DTOs.LoginDto) on controller EcommerceAPI.Controllers.AuthController (EcommerceAPI).
+2026-06-28 10:35:18.104 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@dto_Email='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[UserID], [u].[Address], [u].[CreatedDate], [u].[Email], [u].[Name], [u].[PasswordHash], [u].[Phone], [u].[RoleID], [r].[RoleID], [r].[RoleName]
+FROM [Users] AS [u]
+INNER JOIN [Roles] AS [r] ON [u].[RoleID] = [r].[RoleID]
+WHERE [u].[Email] = @dto_Email
+2026-06-28 10:35:18.106 +05:30 [INF] Executing UnauthorizedObjectResult, writing value of type 'System.String'.
+2026-06-28 10:35:18.107 +05:30 [INF] Executed action EcommerceAPI.Controllers.AuthController.Login (EcommerceAPI) in 69.2667ms
+2026-06-28 10:35:18.108 +05:30 [INF] Executed endpoint 'EcommerceAPI.Controllers.AuthController.Login (EcommerceAPI)'
+2026-06-28 10:35:18.109 +05:30 [INF] Request finished HTTP/2 POST https://localhost:7269/api/auth/login - 401 null text/plain; charset=utf-8 77.7173ms
+2026-06-28 10:35:31.674 +05:30 [INF] Request starting HTTP/2 OPTIONS https://localhost:7269/api/auth/login - null null
+2026-06-28 10:35:31.675 +05:30 [INF] CORS policy execution successful.
+2026-06-28 10:35:31.676 +05:30 [INF] Request finished HTTP/2 OPTIONS https://localhost:7269/api/auth/login - 204 null null 2.7681ms
+2026-06-28 10:35:31.678 +05:30 [INF] Request starting HTTP/2 POST https://localhost:7269/api/auth/login - application/json 47
+2026-06-28 10:35:31.680 +05:30 [INF] CORS policy execution successful.
+2026-06-28 10:35:31.683 +05:30 [INF] Executing endpoint 'EcommerceAPI.Controllers.AuthController.Login (EcommerceAPI)'
+2026-06-28 10:35:31.684 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[EcommerceAPI.DTOs.AuthResponseDto]] Login(EcommerceAPI.DTOs.LoginDto) on controller EcommerceAPI.Controllers.AuthController (EcommerceAPI).
+2026-06-28 10:35:31.689 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@dto_Email='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[UserID], [u].[Address], [u].[CreatedDate], [u].[Email], [u].[Name], [u].[PasswordHash], [u].[Phone], [u].[RoleID], [r].[RoleID], [r].[RoleName]
+FROM [Users] AS [u]
+INNER JOIN [Roles] AS [r] ON [u].[RoleID] = [r].[RoleID]
+WHERE [u].[Email] = @dto_Email
+2026-06-28 10:35:31.793 +05:30 [INF] Executing OkObjectResult, writing value of type 'EcommerceAPI.DTOs.AuthResponseDto'.
+2026-06-28 10:35:31.797 +05:30 [INF] Executed action EcommerceAPI.Controllers.AuthController.Login (EcommerceAPI) in 111.8869ms
+2026-06-28 10:35:31.798 +05:30 [INF] Executed endpoint 'EcommerceAPI.Controllers.AuthController.Login (EcommerceAPI)'
+2026-06-28 10:35:31.799 +05:30 [INF] Request finished HTTP/2 POST https://localhost:7269/api/auth/login - 200 null application/json; charset=utf-8 120.7325ms
+2026-06-28 10:35:31.824 +05:30 [INF] Request starting HTTP/2 OPTIONS https://localhost:7269/api/orders/all - null null
+2026-06-28 10:35:31.826 +05:30 [INF] CORS policy execution successful.
+2026-06-28 10:35:31.827 +05:30 [INF] Request finished HTTP/2 OPTIONS https://localhost:7269/api/orders/all - 204 null null 2.6309ms
+2026-06-28 10:35:31.829 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7269/api/orders/all - null null
+2026-06-28 10:35:31.834 +05:30 [INF] CORS policy execution successful.
+2026-06-28 10:35:31.886 +05:30 [INF] Executing endpoint 'EcommerceAPI.Controllers.OrdersController.GetAllOrders (EcommerceAPI)'
+2026-06-28 10:35:31.889 +05:30 [INF] Route matched with {action = "GetAllOrders", controller = "Orders"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetAllOrders() on controller EcommerceAPI.Controllers.OrdersController (EcommerceAPI).
+2026-06-28 10:35:31.957 +05:30 [INF] Executed DbCommand (13ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [o].[OrderID], [o].[OrderDate], [o].[TotalAmount], [o].[Status], [u].[Name], [u].[Email], [u].[UserID], [s].[ProductName], [s].[Quantity], [s].[Price], [s].[OrderDetailID], [s].[ProductID]
+FROM [orders] AS [o]
+INNER JOIN [Users] AS [u] ON [o].[UserID] = [u].[UserID]
+LEFT JOIN (
+    SELECT [p].[ProductName], [o0].[Quantity], [o0].[Price], [o0].[OrderDetailID], [p].[ProductID], [o0].[OrderID]
+    FROM [orderdetails] AS [o0]
+    LEFT JOIN [products] AS [p] ON [o0].[ProductID] = [p].[ProductID]
+) AS [s] ON [o].[OrderID] = [s].[OrderID]
+ORDER BY [o].[OrderID], [u].[UserID], [s].[OrderDetailID]
+2026-06-28 10:35:31.965 +05:30 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[<>f__AnonymousType12`7[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.DateTime, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Decimal, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Collections.Generic.IEnumerable`1[[<>f__AnonymousType13`3[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Nullable`1[[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Nullable`1[[System.Decimal, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], EcommerceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], EcommerceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-28 10:35:31.998 +05:30 [INF] Executed action EcommerceAPI.Controllers.OrdersController.GetAllOrders (EcommerceAPI) in 107.7334ms
+2026-06-28 10:35:31.999 +05:30 [INF] Executed endpoint 'EcommerceAPI.Controllers.OrdersController.GetAllOrders (EcommerceAPI)'
+2026-06-28 10:35:31.999 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7269/api/orders/all - 200 null application/json; charset=utf-8 170.018ms
+2026-06-28 10:38:07.268 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7269/swagger/index.html - null null
+2026-06-28 10:38:07.528 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7269/swagger/index.html - 200 null text/html;charset=utf-8 260.3265ms
+2026-06-28 10:38:07.556 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7269/_vs/browserLink - null null
+2026-06-28 10:38:07.556 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7269/_framework/aspnetcore-browser-refresh.js - null null
+2026-06-28 10:38:07.572 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7269/_framework/aspnetcore-browser-refresh.js - 200 14929 application/javascript; charset=utf-8 15.2825ms
+2026-06-28 10:38:07.648 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7269/_vs/browserLink - 200 null text/javascript; charset=UTF-8 91.8321ms
+2026-06-28 10:38:07.708 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7269/swagger/v1/swagger.json - null null
+2026-06-28 10:38:07.754 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7269/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 46.4919ms
+2026-06-28 10:38:40.851 +05:30 [INF] Request starting HTTP/2 POST https://localhost:7269/api/Auth/login - application/json 56
+2026-06-28 10:38:40.854 +05:30 [INF] CORS policy execution failed.
+2026-06-28 10:38:40.855 +05:30 [INF] Request origin https://localhost:7269 does not have permission to access the resource.
+2026-06-28 10:38:40.856 +05:30 [INF] Executing endpoint 'EcommerceAPI.Controllers.AuthController.Login (EcommerceAPI)'
+2026-06-28 10:38:40.858 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[EcommerceAPI.DTOs.AuthResponseDto]] Login(EcommerceAPI.DTOs.LoginDto) on controller EcommerceAPI.Controllers.AuthController (EcommerceAPI).
+2026-06-28 10:38:40.875 +05:30 [INF] Executed DbCommand (12ms) [Parameters=[@dto_Email='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[UserID], [u].[Address], [u].[CreatedDate], [u].[Email], [u].[Name], [u].[PasswordHash], [u].[Phone], [u].[RoleID], [r].[RoleID], [r].[RoleName]
+FROM [Users] AS [u]
+INNER JOIN [Roles] AS [r] ON [u].[RoleID] = [r].[RoleID]
+WHERE [u].[Email] = @dto_Email
+2026-06-28 10:38:40.880 +05:30 [INF] Executing OkObjectResult, writing value of type 'EcommerceAPI.DTOs.AuthResponseDto'.
+2026-06-28 10:38:40.881 +05:30 [INF] Executed action EcommerceAPI.Controllers.AuthController.Login (EcommerceAPI) in 21.365ms
+2026-06-28 10:38:40.883 +05:30 [INF] Executed endpoint 'EcommerceAPI.Controllers.AuthController.Login (EcommerceAPI)'
+2026-06-28 10:38:40.884 +05:30 [INF] Request finished HTTP/2 POST https://localhost:7269/api/Auth/login - 200 null application/json; charset=utf-8 32.8848ms
+2026-06-28 11:26:59.847 +05:30 [INF] Executed DbCommand (25ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Roles] AS [r]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2026-06-28 11:27:00.004 +05:30 [INF] User profile is available. Using 'C:\Users\Imran\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-06-28 11:27:00.197 +05:30 [INF] Now listening on: https://localhost:7269
+2026-06-28 11:27:00.198 +05:30 [INF] Now listening on: http://localhost:5237
+2026-06-28 11:27:00.246 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2026-06-28 11:27:00.247 +05:30 [INF] Hosting environment: Development
+2026-06-28 11:27:00.248 +05:30 [INF] Content root path: C:\Users\Imran\source\repos\EcommerceAPI\EcommerceAPI
+2026-06-28 11:27:10.840 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7269/swagger/index.html - null null
+2026-06-28 11:27:11.032 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7269/swagger/index.html - 200 null text/html;charset=utf-8 198.0536ms
+2026-06-28 11:27:11.072 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7269/_vs/browserLink - null null
+2026-06-28 11:27:11.072 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7269/_framework/aspnetcore-browser-refresh.js - null null
+2026-06-28 11:27:11.085 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7269/_framework/aspnetcore-browser-refresh.js - 200 14929 application/javascript; charset=utf-8 12.5706ms
+2026-06-28 11:27:11.108 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7269/_vs/browserLink - 200 null text/javascript; charset=UTF-8 35.9893ms
+2026-06-28 11:27:11.189 +05:30 [INF] Request starting HTTP/2 GET https://localhost:7269/swagger/v1/swagger.json - null null
+2026-06-28 11:27:11.248 +05:30 [INF] Request finished HTTP/2 GET https://localhost:7269/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 58.7724ms
+2026-06-28 11:27:33.699 +05:30 [INF] Request starting HTTP/2 POST https://localhost:7269/api/Auth/login - application/json 56
+2026-06-28 11:27:33.710 +05:30 [INF] CORS policy execution failed.
+2026-06-28 11:27:33.711 +05:30 [INF] Request origin https://localhost:7269 does not have permission to access the resource.
+2026-06-28 11:27:33.758 +05:30 [INF] Executing endpoint 'EcommerceAPI.Controllers.AuthController.Login (EcommerceAPI)'
+2026-06-28 11:27:33.786 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[EcommerceAPI.DTOs.AuthResponseDto]] Login(EcommerceAPI.DTOs.LoginDto) on controller EcommerceAPI.Controllers.AuthController (EcommerceAPI).
+2026-06-28 11:27:34.054 +05:30 [INF] Executed DbCommand (38ms) [Parameters=[@dto_Email='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[UserID], [u].[Address], [u].[CreatedDate], [u].[Email], [u].[Name], [u].[PasswordHash], [u].[Phone], [u].[RoleID], [r].[RoleID], [r].[RoleName]
+FROM [Users] AS [u]
+INNER JOIN [Roles] AS [r] ON [u].[RoleID] = [r].[RoleID]
+WHERE [u].[Email] = @dto_Email
+2026-06-28 11:27:34.174 +05:30 [INF] Executing OkObjectResult, writing value of type 'EcommerceAPI.DTOs.AuthResponseDto'.
+2026-06-28 11:27:34.183 +05:30 [INF] Executed action EcommerceAPI.Controllers.AuthController.Login (EcommerceAPI) in 391.7504ms
+2026-06-28 11:27:34.185 +05:30 [INF] Executed endpoint 'EcommerceAPI.Controllers.AuthController.Login (EcommerceAPI)'
+2026-06-28 11:27:34.192 +05:30 [INF] Request finished HTTP/2 POST https://localhost:7269/api/Auth/login - 200 null application/json; charset=utf-8 493.203ms

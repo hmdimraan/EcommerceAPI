@@ -1,16 +1,25 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
-public class ProductCreateDto
+namespace EcommerceAPI.DTOs
 {
-    public string ProductName { get; set; }
+    public class ProductCreateDto
+    {
+        [Required]
+        public string ProductName { get; set; }
+            = string.Empty;
 
-    public decimal Price { get; set; }
+        [Range(1, 1000000)]
+        public decimal Price { get; set; }
 
-    public int Stock { get; set; }
+        [Range(0, 100000)]
+        public int Stock { get; set; }
 
-    public int CategoryID { get; set; }
+        [Required]
+        public int CategoryID { get; set; }
 
-    public IFormFile? ProductImage { get; set; }
+        public IFormFile? ProductImage { get; set; }
 
-    public IFormFile InvoicePdf { get; set; }
+        public IFormFile? InvoicePdf { get; set; }
+    }
 }

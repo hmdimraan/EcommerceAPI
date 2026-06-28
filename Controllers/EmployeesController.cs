@@ -1,12 +1,10 @@
-﻿using EcommerceApi.DTOs;
-using EcommerceApi.Models;
-using EcommerceAPI.Data;
+﻿using EcommerceAPI.Data;
 using EcommerceAPI.DTOs;
 using EcommerceAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace EcommerceApi.Controllers
+namespace EcommerceAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -19,21 +17,22 @@ namespace EcommerceApi.Controllers
             _context = context;
         }
 
-        // GET: api/employees
         [HttpGet]
         public async Task<IActionResult> GetEmployees()
         {
-            var employees = await _context.Employees.ToListAsync();
+            var employees =
+                await _context.Employees.ToListAsync();
 
             return Ok(employees);
         }
 
-        // GET: api/employees/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetEmployee(int id)
         {
-            var employee = await _context.Employees
-                .FirstOrDefaultAsync(e => e.Id == id);
+            var employee =
+                await _context.Employees
+                    .FirstOrDefaultAsync(
+                        e => e.Id == id);
 
             if (employee == null)
                 return NotFound();
@@ -41,9 +40,9 @@ namespace EcommerceApi.Controllers
             return Ok(employee);
         }
 
-        // POST: api/employees
         [HttpPost]
-        public async Task<IActionResult> CreateEmployee(EmployeeCreateDto dto)
+        public async Task<IActionResult> CreateEmployee(
+            EmployeeCreateDto dto)
         {
             var employee = new Employee
             {
@@ -61,21 +60,24 @@ namespace EcommerceApi.Controllers
             return Ok(employee);
         }
 
-        // DELETE: api/employees/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEmployee(int id)
+        public async Task<IActionResult> DeleteEmployee(
+            int id)
         {
-            var employee = await _context.Employees
-                .FirstOrDefaultAsync(e => e.Id == id);
+            var employee =
+                await _context.Employees
+                    .FirstOrDefaultAsync(
+                        e => e.Id == id);
 
             if (employee == null)
                 return NotFound();
 
             _context.Employees.Remove(employee);
 
-            await _context.SaveChangesAsync( );
+            await _context.SaveChangesAsync();
 
-            return Ok("Employee deleted successfully");
+            return Ok(
+                "Employee deleted successfully");
         }
     }
 }

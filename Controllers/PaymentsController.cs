@@ -11,7 +11,8 @@ namespace EcommerceAPI.Controllers
     {
         private readonly AppDbContext _context;
 
-        public PaymentsController(AppDbContext context)
+        public PaymentsController(
+            AppDbContext context)
         {
             _context = context;
         }
@@ -19,12 +20,15 @@ namespace EcommerceAPI.Controllers
         [HttpGet]
         public IActionResult GetPayments()
         {
-            return Ok(_context.Payments.ToList());
+            return Ok(
+                _context.Payments.ToList());
         }
+
         [HttpGet("{id}")]
         public IActionResult GetPayment(int id)
         {
-            var payment = _context.Payments.Find(id);
+            var payment =
+                _context.Payments.Find(id);
 
             if (payment == null)
             {
@@ -33,34 +37,47 @@ namespace EcommerceAPI.Controllers
 
             return Ok(payment);
         }
+
         [HttpPost]
-        public IActionResult CreatePayment(PaymentCreateDto dto)
+        public IActionResult CreatePayment(
+            PaymentCreateDto dto)
         {
             var payment = new Payment
             {
                 OrderID = dto.OrderID,
-                PaymentMethod = dto.PaymentMethod,
-                PaymentDate = dto.PaymentDate
+                PaymentMethod =
+                    dto.PaymentMethod,
+                PaymentDate =
+                    dto.PaymentDate,
+                Amount = dto.Amount,
+                PaymentStatus = "Paid"
             };
 
             _context.Payments.Add(payment);
+
             _context.SaveChanges();
 
             return Ok(payment);
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdatePayment(int id, Payment updatedPayment)
+        public IActionResult UpdatePayment(
+            int id,
+            Payment updatedPayment)
         {
-            var payment = _context.Payments.Find(id);
+            var payment =
+                _context.Payments.Find(id);
 
             if (payment == null)
             {
                 return NotFound();
             }
 
-            
-            payment.PaymentMethod = updatedPayment.PaymentMethod;
+            payment.PaymentMethod =
+                updatedPayment.PaymentMethod;
+
+            payment.PaymentStatus =
+                updatedPayment.PaymentStatus;
 
             _context.SaveChanges();
 
@@ -68,9 +85,11 @@ namespace EcommerceAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeletePayment(int id)
+        public IActionResult DeletePayment(
+            int id)
         {
-            var payment = _context.Payments.Find(id);
+            var payment =
+                _context.Payments.Find(id);
 
             if (payment == null)
             {
@@ -81,7 +100,11 @@ namespace EcommerceAPI.Controllers
 
             _context.SaveChanges();
 
-            return Ok();
+            return Ok(new
+            {
+                Message =
+                    "Payment deleted successfully."
+            });
         }
     }
 }

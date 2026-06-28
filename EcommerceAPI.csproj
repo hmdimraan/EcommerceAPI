@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -7,58 +7,40 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.8" />
+
+    <!-- AUTH -->
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.9" />
+
+    <!-- SWAGGER -->
+
+    <!-- EF CORE -->
+
+    <!-- SQL CLIENT -->
     <PackageReference Include="Microsoft.Data.SqlClient" Version="7.0.1" />
-
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.8" />
-
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.8">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>
-        runtime;
-        build;
-        native;
-        contentfiles;
-        analyzers;
-        buildtransitive
-      </IncludeAssets>
     </PackageReference>
-
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.8" />
-
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.8">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>
-        runtime;
-        build;
-        native;
-        contentfiles;
-        analyzers;
-        buildtransitive
-      </IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.OpenApi" Version="1.6.14" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
+    <PackageReference Include="QuestPDF" Version="2026.6.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
+    <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
 
-    <PackageReference Include="MongoDB.Driver" Version="3.9.0" />
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-       <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.7" />
-  </ItemGroup>
+    <!-- JWT -->
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.19.1" />
 
-  <ItemGroup>
-    <EditorConfigFiles Remove="C:\Users\Imran\source\repos\EcommerceAPI\EcommerceAPI\DTOs\.editorconfig" />
-  </ItemGroup>
+    <!-- JSON -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 
-  <ItemGroup>
-    <None Include="C:\Users\Imran\source\repos\EcommerceAPI\EcommerceAPI\DTOs\.editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="wwwroot\Invoices\1298cf2d-4ce6-4ee9-aee4-eae78e0b901f.pdf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-
-    <Content Update="wwwroot\ProductImages\33a46b75-1240-48d0-892e-ae1ba55c10e6.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
 </Project>

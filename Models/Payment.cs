@@ -15,5 +15,8 @@ namespace EcommerceAPI.Models
         public DateTime? PaymentDate { get; set; }
         [JsonIgnore]
         public Order? Order { get; set; }
+        public decimal Amount { get; set; }
+        public string PaymentStatus { get; set; }
+    = string.Empty;
     }
 }

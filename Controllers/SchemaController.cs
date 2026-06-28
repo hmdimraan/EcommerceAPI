@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using MongoDB.Driver;
 using System.Xml.Linq;
 
 namespace EcommerceAPI.Controllers
@@ -23,18 +22,10 @@ namespace EcommerceAPI.Controllers
             string sqlConnectionString =
                 _configuration.GetConnectionString("DefaultConnection");
 
-            string mongoConnectionString =
-       _configuration.GetConnectionString("MongoConnection");
+            
+  
 
-            string mongoDatabaseName =
-                "EcommerceMongo";
 
-            var mongoClient =
-                new MongoClient(mongoConnectionString);//connects to mongodb server running on localhost at port 27017
-
-            var mongoDatabase =
-                mongoClient.GetDatabase(mongoDatabaseName);
-            // returns IMongoDatabase object - IMongoDatabase { Name = "EcommerceMongo"}
             var result = new List<object>();
 
             using SqlConnection conn =
@@ -60,64 +51,7 @@ namespace EcommerceAPI.Controllers
 
             tableReader.Close();//Only one reader can be active on connection at a time.
 
-            foreach (string tableName in tables)
-            {
-                var existingCollections =
-                    mongoDatabase
-                    .ListCollectionNames()
-                    .ToList();
-
-                if (!existingCollections.Contains(tableName))
-                {
-                    mongoDatabase.CreateCollection(tableName);
-                }
-                //Verbatim string literal Allows multiline string
-
-                string columnQuery = @"
-                    SELECT
-                        COLUMN_NAME,
-                        DATA_TYPE,
-                        IS_NULLABLE
-                    FROM INFORMATION_SCHEMA.COLUMNS
-                    WHERE TABLE_NAME = @TableName
-                    ORDER BY ORDINAL_POSITION";
-                //ORDINAL_POSITION represents the position of a column in the table.
-                using SqlCommand columnCmd =
-                    new SqlCommand(columnQuery, conn);
-                //columnCmd Parameters[@TableName = "Products"]
-                columnCmd.Parameters.AddWithValue(
-                    "@TableName",
-                    tableName);
-
-                using SqlDataReader columnReader =
-                    columnCmd.ExecuteReader();//exrecutes the query and returns the result rows
-
-                List<object> columns = new();
-
-                while (columnReader.Read())
-                {
-                    columns.Add(new
-                    {
-                        ColumnName =
-                            columnReader["COLUMN_NAME"].ToString(),
-
-                        DataType =
-                            columnReader["DATA_TYPE"].ToString(),
-
-                        IsNullable =
-                            columnReader["IS_NULLABLE"].ToString()
-                    });
-                }
-
-                columnReader.Close();
-
-                result.Add(new
-                {
-                    Table = tableName,
-                    Columns = columns
-                });
-            }
-
+           
             return Ok(new
             {
                 Message =

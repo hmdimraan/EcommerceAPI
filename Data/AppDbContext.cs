@@ -54,12 +54,11 @@ namespace EcommerceAPI.Data
 
             modelBuilder.Entity<Employee>()
                 .ToTable("employees");
-
             modelBuilder.Entity<Role>()
-                .ToTable("Roles");
+                .ToTable("roles");
 
             modelBuilder.Entity<User>()
-                .ToTable("Users");
+                .ToTable("users");
             modelBuilder.Entity<Cart>()
     .ToTable("carts");
 

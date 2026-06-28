@@ -180,6 +180,7 @@ app.UseMiddleware<ExceptionMiddleware>();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.UseDeveloperExceptionPage();
 app.UseHttpsRedirection();
 
 app.UseCors("AllowAngular");

@@ -77,10 +77,12 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 // =========================
 // DATABASE
 // =========================
-
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("MariaDBConnection"),
+        ServerVersion.AutoDetect(
+            builder.Configuration.GetConnectionString("MariaDBConnection")
+        )
     ));
 // =========================
 // JWT AUTHENTICATION

@@ -20,10 +20,11 @@ namespace EcommerceAPI.Controllers
         public IActionResult SyncSchemaToMongo()
         {
             string sqlConnectionString =
-                _configuration.GetConnectionString("DefaultConnection");
+              _configuration.GetConnectionString("MariaDBConnection");
 
-            
-  
+
+
+
 
 
             var result = new List<object>();

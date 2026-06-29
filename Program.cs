@@ -83,7 +83,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         ServerVersion.AutoDetect(
             builder.Configuration.GetConnectionString("MariaDBConnection")
         )
-    ));
+    )
+);
 // =========================
 // JWT AUTHENTICATION
 // =========================

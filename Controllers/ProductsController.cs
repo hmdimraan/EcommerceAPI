@@ -24,6 +24,7 @@ namespace EcommerceAPI.Controllers
         [HttpGet]
         public IActionResult GetProducts()
         {
+            var baseUrl = $"{Request.Scheme}://{Request.Host}/";
             var products = _context.Products
                 .Select(p => new ProductResponseDto
                 {
@@ -32,7 +33,9 @@ namespace EcommerceAPI.Controllers
                     Price = p.Price,
                     Stock = p.Stock,
                     CategoryID = p.CategoryID ?? 0,
-                    ProductImagePath = p.ProductImagePath,
+                    ProductImagePath = p.ProductImagePath != null
+    ? baseUrl + p.ProductImagePath
+    : null,
 
                     AverageRating = p.Reviews.Any()
                         ? p.Reviews.Average(r => r.Rating)
@@ -54,6 +57,7 @@ namespace EcommerceAPI.Controllers
             decimal? maxPrice,
             int? categoryId)
         {
+            var baseUrl = $"{Request.Scheme}://{Request.Host}/";
             var products = _context.Products.AsQueryable();
 
             if (minPrice.HasValue)
@@ -82,7 +86,9 @@ namespace EcommerceAPI.Controllers
                     Price = p.Price,
                     Stock = p.Stock,
                     CategoryID = p.CategoryID ?? 0,
-                    ProductImagePath = p.ProductImagePath
+                    ProductImagePath = p.ProductImagePath != null
+    ? baseUrl + p.ProductImagePath
+    : null
                 })
                 .ToList();
 
@@ -92,7 +98,7 @@ namespace EcommerceAPI.Controllers
         // =========================
         // PRODUCT STATS
         // =========================
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]f
         [HttpGet("stats")]
         public IActionResult GetStats()
         {
@@ -122,6 +128,7 @@ namespace EcommerceAPI.Controllers
         public IActionResult GetProductsByCategory(
             int categoryId)
         {
+            var baseUrl = $"{Request.Scheme}://{Request.Host}/";
             var products = _context.Products
                 .Where(
                     p => p.CategoryID == categoryId)
@@ -132,7 +139,9 @@ namespace EcommerceAPI.Controllers
                     Price = p.Price,
                     Stock = p.Stock,
                     CategoryID = p.CategoryID ?? 0,
-                    ProductImagePath = p.ProductImagePath
+                    ProductImagePath = p.ProductImagePath != null
+    ? baseUrl + p.ProductImagePath
+    : null
                 })
                 .ToList();
 
@@ -146,6 +155,7 @@ namespace EcommerceAPI.Controllers
         public IActionResult SearchProducts(
             string keyword)
         {
+            var baseUrl = $"{Request.Scheme}://{Request.Host}/";
             var products = _context.Products
                 .Where(
                     p => p.ProductName.Contains(keyword))
@@ -156,7 +166,9 @@ namespace EcommerceAPI.Controllers
                     Price = p.Price,
                     Stock = p.Stock,
                     CategoryID = p.CategoryID ?? 0,
-                    ProductImagePath = p.ProductImagePath
+                    ProductImagePath = p.ProductImagePath != null
+    ? baseUrl + p.ProductImagePath
+    : null
                 })
                 .ToList();
 
@@ -171,6 +183,7 @@ namespace EcommerceAPI.Controllers
             int page = 1,
             int pageSize = 2)
         {
+            var baseUrl = $"{Request.Scheme}://{Request.Host}/";
             var products = _context.Products
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
@@ -181,7 +194,9 @@ namespace EcommerceAPI.Controllers
                     Price = p.Price,
                     Stock = p.Stock,
                     CategoryID = p.CategoryID ?? 0,
-                    ProductImagePath = p.ProductImagePath
+                    ProductImagePath = p.ProductImagePath != null
+    ? baseUrl + p.ProductImagePath
+    : null
                 })
                 .ToList();
 
@@ -196,6 +211,7 @@ namespace EcommerceAPI.Controllers
         public async Task<IActionResult> AddProduct(
             [FromForm] ProductCreateDto dto)
         {
+            var baseUrl = $"{Request.Scheme}://{Request.Host}/";
             string? imagePath = null;
             string? invoicePath = null;
 
@@ -290,6 +306,7 @@ namespace EcommerceAPI.Controllers
             int id,
             [FromForm] ProductCreateDto dto)
         {
+            var baseUrl = $"{Request.Scheme}://{Request.Host}/";
             var product =
                 await _context.Products
                     .FindAsync(id);
@@ -354,6 +371,7 @@ namespace EcommerceAPI.Controllers
         public async Task<IActionResult> DeleteProduct(
             int id)
         {
+            var baseUrl = $"{Request.Scheme}://{Request.Host}/";
             var product =
                 await _context.Products
                     .FindAsync(id);
@@ -380,6 +398,7 @@ namespace EcommerceAPI.Controllers
         public IActionResult SortProducts(
             string order = "asc")
         {
+            var baseUrl = $"{Request.Scheme}://{Request.Host}/";
             var products =
                 order.ToLower() == "desc"
                 ? _context.Products
@@ -397,7 +416,9 @@ namespace EcommerceAPI.Controllers
                     Price = p.Price,
                     Stock = p.Stock,
                     CategoryID = p.CategoryID ?? 0,
-                    ProductImagePath = p.ProductImagePath
+                    ProductImagePath = p.ProductImagePath != null
+    ? baseUrl + p.ProductImagePath
+    : null
                 })
                 .ToList();
 

@@ -19,7 +19,7 @@ namespace EcommerceAPI.Services
         {
             var claims = new List<Claim>
             {
-                // 🔥 IMPORTANT: used by OrdersController
+                //: used by OrdersController
                 new Claim(
                     ClaimTypes.NameIdentifier,
                     user.UserID.ToString()
@@ -44,7 +44,7 @@ namespace EcommerceAPI.Services
                 )
             };
 
-            var key = new SymmetricSecurityKey(
+            var key = new SymmetricSecurityKey(//Store the secret key that will be used to sign the JWT
                 Encoding.UTF8.GetBytes(
                     _configuration["Jwt:Key"]!
                 )

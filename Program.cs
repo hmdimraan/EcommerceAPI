@@ -77,14 +77,28 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 // =========================
 // DATABASE
 // =========================
+var connectionString =
+    Environment.GetEnvironmentVariable("MariaDBConnection")
+    ?? builder.Configuration.GetConnectionString("MariaDBConnection");
+
+
+if (string.IsNullOrEmpty(connectionString))
+    throw new Exception("❌ DefaultConnection is missing");
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(
-        builder.Configuration.GetConnectionString("MariaDBConnection"),
-        ServerVersion.AutoDetect(
-            builder.Configuration.GetConnectionString("MariaDBConnection")
-        )
-    )
-);
+{
+    if (connectionString.Contains("SQLEXPRESS"))
+    {
+        options.UseSqlServer(connectionString);
+    }
+    else
+    {
+        options.UseMySql(
+            connectionString,
+            ServerVersion.AutoDetect(connectionString)
+        );
+    }
+});
 // =========================
 // JWT AUTHENTICATION
 // =========================

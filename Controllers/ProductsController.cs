@@ -98,7 +98,7 @@ namespace EcommerceAPI.Controllers
         // =========================
         // PRODUCT STATS
         // =========================
-        [Authorize(Roles = "Admin")]f
+        [Authorize(Roles = "Admin")]
         [HttpGet("stats")]
         public IActionResult GetStats()
         {

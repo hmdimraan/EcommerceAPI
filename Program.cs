@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using Serilog;
 using QuestPDF.Infrastructure;
+using Microsoft.Extensions.FileProviders;
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .WriteTo.File(
@@ -200,7 +201,15 @@ app.UseHttpsRedirection();
 
 app.UseCors("AllowAngular");
 
-app.UseStaticFiles();
+app.UseStaticFiles(); // for wwwroot root
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.WebRootPath, "ProductImages")
+    ),
+    RequestPath = "/ProductImages"
+});
 
 app.UseAuthentication();
 

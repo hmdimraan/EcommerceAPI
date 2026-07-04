@@ -6,85 +6,79 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Text;
 using Serilog;
 using QuestPDF.Infrastructure;
 using Microsoft.Extensions.FileProviders;
+using System.Text;
+
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
-    .WriteTo.File(
-        "Logs/log-.txt",
-        rollingInterval: RollingInterval.Day)
+    .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
     .CreateLogger();
-var builder = WebApplication.CreateBuilder(args);
-builder.Host.UseSerilog();
-// =========================
-// SERVICES
-// =========================
 
+var builder = WebApplication.CreateBuilder(args);
+
+// =========================
+// SERILOG
+// =========================
+builder.Host.UseSerilog();
+
+// =========================
+// CONTROLLERS
+// =========================
 builder.Services.AddControllers();
-builder.Services.AddScoped<PdfService>();
-builder.Services
-    .AddControllers()
-    .ConfigureApiBehaviorOptions(options =>
-    {
-        options.SuppressModelStateInvalidFilter = false;
-    });
 
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc(
-        "v1",
-        new OpenApiInfo
-        {
-            Title = "Ecommerce API",
-            Version = "v1"
-        });
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Ecommerce API",
+        Version = "v1"
+    });
 
-    options.AddSecurityDefinition(
-        "Bearer",
-        new OpenApiSecurityScheme
-        {
-            Name = "Authorization",
-            Type = SecuritySchemeType.Http,
-            Scheme = "bearer",
-            BearerFormat = "JWT",
-            In = ParameterLocation.Header,
-            Description = "Enter: Bearer {your token}"
-        });
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Enter: Bearer {your token}"
+    });
 
-    options.AddSecurityRequirement(
-        new OpenApiSecurityRequirement
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
         {
+            new OpenApiSecurityScheme
             {
-                new OpenApiSecurityScheme
+                Reference = new OpenApiReference
                 {
-                    Reference =
-                        new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
-                },
-                Array.Empty<string>()
-            }
-        });
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
 });
 
+// =========================
+// SERVICES
+// =========================
+builder.Services.AddScoped<PdfService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
 // =========================
-// DATABASE
+// DATABASE (SQL / MYSQL SUPPORT)
 // =========================
 var connectionString =
     Environment.GetEnvironmentVariable("MariaDBConnection")
     ?? builder.Configuration.GetConnectionString("MariaDBConnection");
 
-
 if (string.IsNullOrEmpty(connectionString))
-    throw new Exception("❌ DefaultConnection is missing");
+    throw new Exception("❌ Connection string is missing");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -94,47 +88,34 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     }
     else
     {
-        options.UseMySql(
-            connectionString,
-            ServerVersion.AutoDetect(connectionString)
-        );
+        options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
     }
 });
-// =========================
-// JWT AUTHENTICATION
-// =========================
 
-builder.Services
-    .AddAuthentication(
-        JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+// =========================
+// JWT AUTH
+// =========================
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        options.TokenValidationParameters =
-            new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
 
-                ValidIssuer =
-                    builder.Configuration["Jwt:Issuer"],
-
-                ValidAudience =
-                    builder.Configuration["Jwt:Audience"],
-
-                IssuerSigningKey =
-                    new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(
-                            builder.Configuration["Jwt:Key"]!
-                        ))
-            };
-    });
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)
+        )
+    };
+});
 
 // =========================
 // AUTHORIZATION
 // =========================
-
 builder.Services.AddAuthorization();
 
 // =========================
@@ -142,66 +123,55 @@ builder.Services.AddAuthorization();
 // =========================
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAngular",
-        policy =>
-        {
-            policy
-                .AllowAnyOrigin()
-                .AllowAnyHeader()
-                .AllowAnyMethod();
-        });
+    options.AddPolicy("AllowAngular", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
 });
 
 // =========================
-// BUILD APP
+// QUESTPDF
 // =========================
 QuestPDF.Settings.License = LicenseType.Community;
+
 var app = builder.Build();
 
 // =========================
 // ROLE SEEDER
 // =========================
-
-using (var scope =
-       app.Services.CreateScope())
+using (var scope = app.Services.CreateScope())
 {
-    var context =
-        scope.ServiceProvider
-            .GetRequiredService<AppDbContext>();
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
     if (!context.Roles.Any())
     {
-        context.Roles.Add(
-            new Role
-            {
-                RoleName = "Admin"
-            });
-
-        context.Roles.Add(
-            new Role
-            {
-                RoleName = "User"
-            });
+        context.Roles.AddRange(
+            new Role { RoleName = "Admin" },
+            new Role { RoleName = "User" }
+        );
 
         context.SaveChanges();
     }
 }
 
 // =========================
-// MIDDLEWARE
+// MIDDLEWARE PIPELINE
 // =========================
-
 app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseDeveloperExceptionPage();
 app.UseHttpsRedirection();
 
 app.UseCors("AllowAngular");
 
-app.UseStaticFiles(); // for wwwroot root
+// =========================
+// STATIC FILES (IMPORTANT FOR IMAGES)
+// =========================
+app.UseStaticFiles(); // wwwroot root
 
 app.UseStaticFiles(new StaticFileOptions
 {
@@ -211,8 +181,10 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = "/ProductImages"
 });
 
+// =========================
+// AUTH
+// =========================
 app.UseAuthentication();
-
 app.UseAuthorization();
 
 app.MapControllers();

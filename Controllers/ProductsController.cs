@@ -24,7 +24,6 @@ namespace EcommerceAPI.Controllers
         [HttpGet]
         public IActionResult GetProducts()
         {
-            var baseUrl = $"{Request.Scheme}://{Request.Host}/";
             var products = _context.Products
                 .Select(p => new ProductResponseDto
                 {
@@ -33,9 +32,7 @@ namespace EcommerceAPI.Controllers
                     Price = p.Price,
                     Stock = p.Stock,
                     CategoryID = p.CategoryID ?? 0,
-                    ProductImagePath = p.ProductImagePath != null
-    ? baseUrl + p.ProductImagePath
-    : null,
+                    ProductImagePath = p.ProductImagePath,
 
                     AverageRating = p.Reviews.Any()
                         ? p.Reviews.Average(r => r.Rating)
@@ -52,31 +49,18 @@ namespace EcommerceAPI.Controllers
         // FILTER PRODUCTS
         // =========================
         [HttpGet("filter")]
-        public IActionResult FilterProducts(
-            decimal? minPrice,
-            decimal? maxPrice,
-            int? categoryId)
+        public IActionResult FilterProducts(decimal? minPrice, decimal? maxPrice, int? categoryId)
         {
-            var baseUrl = $"{Request.Scheme}://{Request.Host}/";
             var products = _context.Products.AsQueryable();
 
             if (minPrice.HasValue)
-            {
-                products = products.Where(
-                    p => p.Price >= minPrice.Value);
-            }
+                products = products.Where(p => p.Price >= minPrice.Value);
 
             if (maxPrice.HasValue)
-            {
-                products = products.Where(
-                    p => p.Price <= maxPrice.Value);
-            }
+                products = products.Where(p => p.Price <= maxPrice.Value);
 
             if (categoryId.HasValue)
-            {
-                products = products.Where(
-                    p => p.CategoryID == categoryId.Value);
-            }
+                products = products.Where(p => p.CategoryID == categoryId.Value);
 
             var response = products
                 .Select(p => new ProductResponseDto
@@ -86,9 +70,7 @@ namespace EcommerceAPI.Controllers
                     Price = p.Price,
                     Stock = p.Stock,
                     CategoryID = p.CategoryID ?? 0,
-                    ProductImagePath = p.ProductImagePath != null
-    ? baseUrl + p.ProductImagePath
-    : null
+                    ProductImagePath = p.ProductImagePath
                 })
                 .ToList();
 
@@ -102,16 +84,9 @@ namespace EcommerceAPI.Controllers
         [HttpGet("stats")]
         public IActionResult GetStats()
         {
-            var totalProducts =
-                _context.Products.Count();
-
-            var totalStock =
-                _context.Products.Sum(
-                    p => p.Stock ?? 0);
-
-            var totalValue =
-                _context.Products.Sum(
-                    p => p.Price * (p.Stock ?? 0));
+            var totalProducts = _context.Products.Count();
+            var totalStock = _context.Products.Sum(p => p.Stock ?? 0);
+            var totalValue = _context.Products.Sum(p => p.Price * (p.Stock ?? 0));
 
             return Ok(new
             {
@@ -122,16 +97,13 @@ namespace EcommerceAPI.Controllers
         }
 
         // =========================
-        // GET PRODUCTS BY CATEGORY
+        // GET BY CATEGORY
         // =========================
         [HttpGet("category/{categoryId}")]
-        public IActionResult GetProductsByCategory(
-            int categoryId)
+        public IActionResult GetProductsByCategory(int categoryId)
         {
-            var baseUrl = $"{Request.Scheme}://{Request.Host}/";
             var products = _context.Products
-                .Where(
-                    p => p.CategoryID == categoryId)
+                .Where(p => p.CategoryID == categoryId)
                 .Select(p => new ProductResponseDto
                 {
                     ProductID = p.ProductID,
@@ -139,9 +111,7 @@ namespace EcommerceAPI.Controllers
                     Price = p.Price,
                     Stock = p.Stock,
                     CategoryID = p.CategoryID ?? 0,
-                    ProductImagePath = p.ProductImagePath != null
-    ? baseUrl + p.ProductImagePath
-    : null
+                    ProductImagePath = p.ProductImagePath
                 })
                 .ToList();
 
@@ -149,16 +119,13 @@ namespace EcommerceAPI.Controllers
         }
 
         // =========================
-        // SEARCH PRODUCTS
+        // SEARCH
         // =========================
         [HttpGet("search")]
-        public IActionResult SearchProducts(
-            string keyword)
+        public IActionResult SearchProducts(string keyword)
         {
-            var baseUrl = $"{Request.Scheme}://{Request.Host}/";
             var products = _context.Products
-                .Where(
-                    p => p.ProductName.Contains(keyword))
+                .Where(p => p.ProductName.Contains(keyword))
                 .Select(p => new ProductResponseDto
                 {
                     ProductID = p.ProductID,
@@ -166,9 +133,7 @@ namespace EcommerceAPI.Controllers
                     Price = p.Price,
                     Stock = p.Stock,
                     CategoryID = p.CategoryID ?? 0,
-                    ProductImagePath = p.ProductImagePath != null
-    ? baseUrl + p.ProductImagePath
-    : null
+                    ProductImagePath = p.ProductImagePath
                 })
                 .ToList();
 
@@ -179,11 +144,8 @@ namespace EcommerceAPI.Controllers
         // PAGINATION
         // =========================
         [HttpGet("paged")]
-        public IActionResult GetProductsPaged(
-            int page = 1,
-            int pageSize = 2)
+        public IActionResult GetProductsPaged(int page = 1, int pageSize = 10)
         {
-            var baseUrl = $"{Request.Scheme}://{Request.Host}/";
             var products = _context.Products
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
@@ -194,9 +156,7 @@ namespace EcommerceAPI.Controllers
                     Price = p.Price,
                     Stock = p.Stock,
                     CategoryID = p.CategoryID ?? 0,
-                    ProductImagePath = p.ProductImagePath != null
-    ? baseUrl + p.ProductImagePath
-    : null
+                    ProductImagePath = p.ProductImagePath
                 })
                 .ToList();
 
@@ -208,77 +168,23 @@ namespace EcommerceAPI.Controllers
         // =========================
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<IActionResult> AddProduct(
-            [FromForm] ProductCreateDto dto)
+        public async Task<IActionResult> AddProduct([FromForm] ProductCreateDto dto)
         {
-            var baseUrl = $"{Request.Scheme}://{Request.Host}/";
             string? imagePath = null;
-            string? invoicePath = null;
 
-            // IMAGE SAVE
             if (dto.ProductImage != null)
             {
-                var imageFileName =
-                    Guid.NewGuid() +
-                    Path.GetExtension(
-                        dto.ProductImage.FileName);
+                var fileName = Guid.NewGuid() + Path.GetExtension(dto.ProductImage.FileName);
 
-                var imageFolder =
-                    Path.Combine(
-                        Directory.GetCurrentDirectory(),
-                        "wwwroot/ProductImages");
+                var folder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/ProductImages");
+                Directory.CreateDirectory(folder);
 
-                Directory.CreateDirectory(
-                    imageFolder);
+                var filePath = Path.Combine(folder, fileName);
 
-                var imageFullPath =
-                    Path.Combine(
-                        imageFolder,
-                        imageFileName);
+                using var stream = new FileStream(filePath, FileMode.Create);
+                await dto.ProductImage.CopyToAsync(stream);
 
-                using var stream =
-                    new FileStream(
-                        imageFullPath,
-                        FileMode.Create);
-
-                await dto.ProductImage
-                    .CopyToAsync(stream);
-
-                imagePath =
-                    $"ProductImages/{imageFileName}";
-            }
-
-            // PDF SAVE
-            if (dto.InvoicePdf != null)
-            {
-                var pdfFileName =
-                    Guid.NewGuid() +
-                    Path.GetExtension(
-                        dto.InvoicePdf.FileName);
-
-                var pdfFolder =
-                    Path.Combine(
-                        Directory.GetCurrentDirectory(),
-                        "wwwroot/Invoices");
-
-                Directory.CreateDirectory(
-                    pdfFolder);
-
-                var pdfFullPath =
-                    Path.Combine(
-                        pdfFolder,
-                        pdfFileName);
-
-                using var stream =
-                    new FileStream(
-                        pdfFullPath,
-                        FileMode.Create);
-
-                await dto.InvoicePdf
-                    .CopyToAsync(stream);
-
-                invoicePath =
-                    $"Invoices/{pdfFileName}";
+                imagePath = $"ProductImages/{fileName}";
             }
 
             var product = new Product
@@ -291,7 +197,6 @@ namespace EcommerceAPI.Controllers
             };
 
             _context.Products.Add(product);
-
             await _context.SaveChangesAsync();
 
             return Ok(product);
@@ -302,64 +207,32 @@ namespace EcommerceAPI.Controllers
         // =========================
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProduct(
-            int id,
-            [FromForm] ProductCreateDto dto)
+        public async Task<IActionResult> UpdateProduct(int id, [FromForm] ProductCreateDto dto)
         {
-            var baseUrl = $"{Request.Scheme}://{Request.Host}/";
-            var product =
-                await _context.Products
-                    .FindAsync(id);
+            var product = await _context.Products.FindAsync(id);
+            if (product == null) return NotFound();
 
-            if (product == null)
-                return NotFound();
-
-            product.ProductName =
-                dto.ProductName;
-
-            product.Price =
-                dto.Price;
-
-            product.Stock =
-                dto.Stock;
-
-            product.CategoryID =
-                dto.CategoryID;
+            product.ProductName = dto.ProductName;
+            product.Price = dto.Price;
+            product.Stock = dto.Stock;
+            product.CategoryID = dto.CategoryID;
 
             if (dto.ProductImage != null)
             {
-                var fileName =
-                    Guid.NewGuid() +
-                    Path.GetExtension(
-                        dto.ProductImage.FileName);
+                var fileName = Guid.NewGuid() + Path.GetExtension(dto.ProductImage.FileName);
 
-                var folder =
-                    Path.Combine(
-                        Directory.GetCurrentDirectory(),
-                        "wwwroot/ProductImages");
+                var folder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/ProductImages");
+                Directory.CreateDirectory(folder);
 
-                Directory.CreateDirectory(
-                    folder);
+                var filePath = Path.Combine(folder, fileName);
 
-                var path =
-                    Path.Combine(
-                        folder,
-                        fileName);
+                using var stream = new FileStream(filePath, FileMode.Create);
+                await dto.ProductImage.CopyToAsync(stream);
 
-                using var stream =
-                    new FileStream(
-                        path,
-                        FileMode.Create);
-
-                await dto.ProductImage
-                    .CopyToAsync(stream);
-
-                product.ProductImagePath =
-                    $"ProductImages/{fileName}";
+                product.ProductImagePath = $"ProductImages/{fileName}";
             }
 
             await _context.SaveChangesAsync();
-
             return Ok(product);
         }
 
@@ -368,62 +241,38 @@ namespace EcommerceAPI.Controllers
         // =========================
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProduct(
-            int id)
+        public async Task<IActionResult> DeleteProduct(int id)
         {
-            var baseUrl = $"{Request.Scheme}://{Request.Host}/";
-            var product =
-                await _context.Products
-                    .FindAsync(id);
+            var product = await _context.Products.FindAsync(id);
+            if (product == null) return NotFound();
 
-            if (product == null)
-                return NotFound();
-
-            _context.Products.Remove(
-                product);
-
+            _context.Products.Remove(product);
             await _context.SaveChangesAsync();
 
-            return Ok(new
-            {
-                Message =
-                    "Product deleted successfully."
-            });
+            return Ok(new { message = "Product deleted successfully" });
         }
 
         // =========================
-        // SORT PRODUCTS
+        // SORT
         // =========================
         [HttpGet("sort")]
-        public IActionResult SortProducts(
-            string order = "asc")
+        public IActionResult SortProducts(string order = "asc")
         {
-            var baseUrl = $"{Request.Scheme}://{Request.Host}/";
-            var products =
-                order.ToLower() == "desc"
-                ? _context.Products
-                    .OrderByDescending(
-                        p => p.Price)
-                : _context.Products
-                    .OrderBy(
-                        p => p.Price);
+            var products = order.ToLower() == "desc"
+                ? _context.Products.OrderByDescending(p => p.Price)
+                : _context.Products.OrderBy(p => p.Price);
 
-            var response = products
-                .Select(p => new ProductResponseDto
-                {
-                    ProductID = p.ProductID,
-                    ProductName = p.ProductName,
-                    Price = p.Price,
-                    Stock = p.Stock,
-                    CategoryID = p.CategoryID ?? 0,
-                    ProductImagePath = p.ProductImagePath != null
-    ? baseUrl + p.ProductImagePath
-    : null
-                })
-                .ToList();
+            var response = products.Select(p => new ProductResponseDto
+            {
+                ProductID = p.ProductID,
+                ProductName = p.ProductName,
+                Price = p.Price,
+                Stock = p.Stock,
+                CategoryID = p.CategoryID ?? 0,
+                ProductImagePath = p.ProductImagePath
+            }).ToList();
 
             return Ok(response);
         }
     }
 }
-

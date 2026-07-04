@@ -18,3 +18,13 @@ SELECT EXISTS (
 2026-07-04 16:41:22.490 +05:30 [INF] Application started. Press Ctrl+C to shut down.
 2026-07-04 16:41:22.491 +05:30 [INF] Hosting environment: Development
 2026-07-04 16:41:22.492 +05:30 [INF] Content root path: C:\Users\Imran\source\repos\EcommerceAPI_Git
+2026-07-04 18:43:11.804 +05:30 [INF] Executed DbCommand (285ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM `roles` AS `r`)
+2026-07-04 18:43:12.013 +05:30 [INF] User profile is available. Using 'C:\Users\Imran\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-07-04 18:43:12.194 +05:30 [INF] Now listening on: https://localhost:7269
+2026-07-04 18:43:12.196 +05:30 [INF] Now listening on: http://localhost:5237
+2026-07-04 18:43:12.248 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2026-07-04 18:43:12.249 +05:30 [INF] Hosting environment: Development
+2026-07-04 18:43:12.250 +05:30 [INF] Content root path: C:\Users\Imran\source\repos\EcommerceAPI_Git

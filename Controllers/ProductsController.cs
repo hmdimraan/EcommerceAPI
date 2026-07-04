@@ -19,12 +19,28 @@ namespace EcommerceAPI.Controllers
         }
 
         // =========================
+        // HELPER: BUILD IMAGE URL
+        // =========================
+        private string? BuildImageUrl(string? path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return null;
+
+            if (path.StartsWith("http"))
+                return path;
+
+            var baseUrl = $"{Request.Scheme}://{Request.Host}";
+            return $"{baseUrl}/{path}";
+        }
+
+        // =========================
         // GET ALL PRODUCTS
         // =========================
         [HttpGet]
         public IActionResult GetProducts()
         {
             var products = _context.Products
+                .Include(p => p.Reviews)
                 .Select(p => new ProductResponseDto
                 {
                     ProductID = p.ProductID,
@@ -32,7 +48,8 @@ namespace EcommerceAPI.Controllers
                     Price = p.Price,
                     Stock = p.Stock,
                     CategoryID = p.CategoryID ?? 0,
-                    ProductImagePath = p.ProductImagePath,
+
+                    ProductImagePath = BuildImageUrl(p.ProductImagePath),
 
                     AverageRating = p.Reviews.Any()
                         ? p.Reviews.Average(r => r.Rating)
@@ -62,17 +79,15 @@ namespace EcommerceAPI.Controllers
             if (categoryId.HasValue)
                 products = products.Where(p => p.CategoryID == categoryId.Value);
 
-            var response = products
-                .Select(p => new ProductResponseDto
-                {
-                    ProductID = p.ProductID,
-                    ProductName = p.ProductName,
-                    Price = p.Price,
-                    Stock = p.Stock,
-                    CategoryID = p.CategoryID ?? 0,
-                    ProductImagePath = p.ProductImagePath
-                })
-                .ToList();
+            var response = products.Select(p => new ProductResponseDto
+            {
+                ProductID = p.ProductID,
+                ProductName = p.ProductName,
+                Price = p.Price,
+                Stock = p.Stock,
+                CategoryID = p.CategoryID ?? 0,
+                ProductImagePath = BuildImageUrl(p.ProductImagePath)
+            }).ToList();
 
             return Ok(response);
         }
@@ -111,7 +126,7 @@ namespace EcommerceAPI.Controllers
                     Price = p.Price,
                     Stock = p.Stock,
                     CategoryID = p.CategoryID ?? 0,
-                    ProductImagePath = p.ProductImagePath
+                    ProductImagePath = BuildImageUrl(p.ProductImagePath)
                 })
                 .ToList();
 
@@ -133,7 +148,7 @@ namespace EcommerceAPI.Controllers
                     Price = p.Price,
                     Stock = p.Stock,
                     CategoryID = p.CategoryID ?? 0,
-                    ProductImagePath = p.ProductImagePath
+                    ProductImagePath = BuildImageUrl(p.ProductImagePath)
                 })
                 .ToList();
 
@@ -156,7 +171,7 @@ namespace EcommerceAPI.Controllers
                     Price = p.Price,
                     Stock = p.Stock,
                     CategoryID = p.CategoryID ?? 0,
-                    ProductImagePath = p.ProductImagePath
+                    ProductImagePath = BuildImageUrl(p.ProductImagePath)
                 })
                 .ToList();
 
@@ -269,7 +284,7 @@ namespace EcommerceAPI.Controllers
                 Price = p.Price,
                 Stock = p.Stock,
                 CategoryID = p.CategoryID ?? 0,
-                ProductImagePath = p.ProductImagePath
+                ProductImagePath = BuildImageUrl(p.ProductImagePath)
             }).ToList();
 
             return Ok(response);
